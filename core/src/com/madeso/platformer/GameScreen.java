@@ -12,11 +12,10 @@ public class GameScreen implements Screen {
     static final int PIXELS_PER_METER = 10;
     static final float TILE_WIDTH = 10;
     private final OrthographicCamera fontCamera;
-    private OrthogonalTiledMapRenderer renderer;
-    private final String path;
     private OrthographicCamera worldCamera;
     PlatformGame game;
-    // Texture img;
+    Dude dude;
+    OrthoMap map;
 
     public GameScreen(PlatformGame game, String path) {
         this.game = game;
@@ -24,14 +23,9 @@ public class GameScreen implements Screen {
         this.worldCamera = new OrthographicCamera();
         this.fontCamera = PlatformGame.CreateTextCamera();
 
-        this.path = path;
-    }
+        this.map = game.assetManager.orthoMap(path);
 
-    public void postLoad() {
-        TiledMap map = game.assetManager.get(path);
-
-        float unitScale = 1;
-        this.renderer = new OrthogonalTiledMapRenderer(map, unitScale);
+        this.dude = new Dude(game);
     }
 
     @Override
@@ -42,13 +36,13 @@ public class GameScreen implements Screen {
         worldCamera.update();
         game.batch.setProjectionMatrix(worldCamera.combined);
         game.batch.begin();
-        this.renderer.render();
+        this.map.render();
         game.batch.end();
 
         this.fontCamera.update();
         this.game.batch.setProjectionMatrix(fontCamera.combined);
         game.batch.begin();
-        game.font.draw(game.batch, "gamestuff", 10, 10);
+        game.font.draw(game.batch, "gamestuff", 20, 20);
         game.batch.end();
     }
 
@@ -79,12 +73,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        // img.dispose();
-        this.game.assetManager.unload(this.path);
+        this.map.dispose();
+        dude.dispose();
     }
 
     public static void LoadWorld(PlatformGame game, String path) {
-        game.assetManager.load(path, TiledMap.class);
         game.setScreen(new LoaderScreen(game, new GameScreen(game, path)));
     }
 }

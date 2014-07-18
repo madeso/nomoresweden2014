@@ -34,7 +34,7 @@ public class LoaderScreen implements Screen {
 
             if (true) { // Gdx.input.isTouched()) {
                 game.assetManager.finishLoading();
-                this.gs.postLoad();
+                game.assetManager.postLoad();
                 game.setScreen(this.gs);
                 this.dispose();
             }
