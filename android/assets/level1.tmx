@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="40" height="20" tilewidth="64" tileheight="64">
+<map version="1.0" orientation="orthogonal" width="40" height="10" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="tiles" tilewidth="64" tileheight="64">
   <image source="tiles.jpg" width="256" height="256"/>
  </tileset>
- <layer name="Tile Layer 1" width="40" height="20">
+ <layer name="bkg" width="40" height="10">
   <data encoding="base64" compression="zlib">
-   eJzt0tEKgDAIhWHN2vb+T1wDRyLzMhE6Fx8LNugvx0TEzlnEsWmzfV3PzGdR2Y2sDd7an03NfVNzZzL67P/z75ZN92rsBfrsvBfb+fXso9lGGr13U8yafTcBAADgn64CDZHxuAHEdgw1
+   eJxjY2BgYBvFo3gUj+JRPIpJxABmswlh
+  </data>
+ </layer>
+ <layer name="black" width="40" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAO2JEwLQA7kZgY/SPRfaNgFAwkoDR/0BqMuo8yQKz7AHRfAeQ=
+  </data>
+ </layer>
+ <layer name="col" width="40" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYMKCkQE2eUoxsQCbWmzuoyYYCu6jJKwpiQ9qgoG0mxhADfeRE86DKX6xmUNp/qA1GG7uGwhMLAAA6bYA5w==
   </data>
  </layer>
 </map>

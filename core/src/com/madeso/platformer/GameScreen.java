@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class GameScreen implements Screen {
-    static final float UNITS_PER_METER = 2;
+    static final float UNITS_PER_METER = 1f;
     private final OrthographicCamera fontCamera;
     private OrthographicCamera worldCamera;
     PlatformGame game;
@@ -27,11 +27,13 @@ public class GameScreen implements Screen {
         this.map = game.assetManager.orthoMap(path);
 
         this.dude = new Dude(game);
+        this.dude.x = 64;
+        this.dude.y = 64;
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         movePlayer(dude, delta, 64);
@@ -61,7 +63,8 @@ public class GameScreen implements Screen {
     private float NiceValue(float x) {
         // hides the issue with ugly lines appearing between the tiles
         // shamelessly stolen from: http://www.reddit.com/r/gamedev/comments/1euvrs/libgdx_tiledmap_linesgaps_between_tiles/
-        return MathUtils.round(10f * x) / 10f;
+        float smooth = 5.0f;
+        return MathUtils.round(smooth * x) / smooth;
     }
 
     private void movePlayer(Dude player, float delta, float speed) {
