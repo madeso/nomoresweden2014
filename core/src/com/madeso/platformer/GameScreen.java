@@ -11,12 +11,12 @@ public class GameScreen implements Screen {
     static final int WIDTH  = 1280;
     static final int HEIGHT = 768;
     static final int PIXELS_PER_METER = 10;
-    static final float TILEWIDTH = 10;
+    static final float TILE_WIDTH = 10;
     private OrthographicCamera cam;
-    Platformer game;
+    PlatformGame game;
 
     Texture img;
-    public GameScreen(Platformer game) {
+    public GameScreen(PlatformGame game) {
         this.game = game;
 
         this.cam = new OrthographicCamera();
@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
         cam.update();
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
-        game.batch.draw(img, 0, 0, TILEWIDTH * 4, TILEWIDTH * 4);
+        game.batch.draw(img, 0, 0, TILE_WIDTH * 4, TILE_WIDTH * 4);
         game.batch.end();
     }
 

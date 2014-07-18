@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
-public class Platformer extends Game {
+public class PlatformGame extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
 	
