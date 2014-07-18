@@ -1,17 +1,24 @@
 package com.madeso.platformer;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class PlatformGame extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
+    public AssetManager assetManager;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-        font = new BitmapFont();
+		this.batch = new SpriteBatch();
+        this.font = new BitmapFont();
+        this.assetManager = new AssetManager();
+        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.setScreen(new MainMenuScreen(this));
 	}
 
@@ -22,7 +29,8 @@ public class PlatformGame extends Game {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        font.dispose();
+        this.batch.dispose();
+        this.font.dispose();
+        this.assetManager.dispose();
     }
 }
