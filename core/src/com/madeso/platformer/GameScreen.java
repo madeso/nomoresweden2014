@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 
 public class GameScreen implements Screen {
-    static final int WIDTH  = 1280;
-    static final int HEIGHT = 768;
     static final int PIXELS_PER_METER = 10;
     static final float TILE_WIDTH = 10;
     private OrthographicCamera cam;
