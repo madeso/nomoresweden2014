@@ -13,8 +13,7 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final PlatformGame game) {
         this.game = game;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera = PlatformGame.CreateTextCamera();
     }
 
     @Override

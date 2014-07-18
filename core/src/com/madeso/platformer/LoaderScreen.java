@@ -14,8 +14,7 @@ public class LoaderScreen implements Screen {
     public LoaderScreen(PlatformGame game, GameScreen gs) {
         this.gs = gs;
         this.game = game;
-        this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 800, 480);
+        this.camera = PlatformGame.CreateTextCamera();
     }
 
     @Override
@@ -33,7 +32,7 @@ public class LoaderScreen implements Screen {
             game.font.draw(game.batch, "Loading done. Touch to play.", 100, 100);
             game.batch.end();
 
-            if (Gdx.input.isTouched()) {
+            if (true) { // Gdx.input.isTouched()) {
                 game.assetManager.finishLoading();
                 this.gs.postLoad();
                 game.setScreen(this.gs);
