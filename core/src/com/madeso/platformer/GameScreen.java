@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class GameScreen implements Screen {
@@ -53,8 +54,14 @@ public class GameScreen implements Screen {
     }
 
     private void cameraTrack(Dude dude, OrthographicCamera camera) {
-        camera.position.x = dude.x;
-        camera.position.y = dude.y;
+        camera.position.x = NiceValue(dude.x);
+        camera.position.y = NiceValue(dude.y);
+    }
+
+    private float NiceValue(float x) {
+        // hides the issue with ugly lines appearing between the tiles
+        // shamelessly stolen from: http://www.reddit.com/r/gamedev/comments/1euvrs/libgdx_tiledmap_linesgaps_between_tiles/
+        return MathUtils.round(10f * x) / 10f;
     }
 
     private void movePlayer(Dude player, float delta, float speed) {
