@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-public class OrthoMap implements IAsset {
+public class OrthoMap implements SuperAsset {
     private final AssetManager assetManager;
     private final String path;
     private OrthogonalTiledMapRenderer renderer;

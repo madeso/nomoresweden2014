@@ -11,13 +11,13 @@ import java.util.List;
 
 public class SmartAssetManager implements Disposable {
     private final AssetManager assetManager;
-    private final List<IAsset> assetsToLoad;
+    private final List<PostLoader> assetsToLoad;
 
     public SmartAssetManager() {
         this.assetManager = new AssetManager();
 
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        assetsToLoad = new ArrayList<IAsset>();
+        assetsToLoad = new ArrayList<PostLoader>();
     }
     
     public SmartTexture texture(String name) {
@@ -27,10 +27,14 @@ public class SmartAssetManager implements Disposable {
     }
 
     public void postLoad() {
-        for(IAsset asset: assetsToLoad) {
+        for(PostLoader asset: assetsToLoad) {
             asset.postLoad();
         }
         assetsToLoad.clear();
+    }
+
+    public void onPostLoad(PostLoader pl) {
+        assetsToLoad.add(pl);
     }
 
     public void finishLoading() {

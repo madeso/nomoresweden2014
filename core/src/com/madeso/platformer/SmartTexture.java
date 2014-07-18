@@ -3,7 +3,7 @@ package com.madeso.platformer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
-public class SmartTexture implements IAsset {
+public class SmartTexture implements SuperAsset {
     private final AssetManager assetManager;
     private final String name;
     public Texture texture;
