@@ -15,6 +15,7 @@ public class Player extends GravityObject {
     private final SmartSound soundThud;
     private final SmartSound soundHardThud;
     private final SmartSound soundSoftThud;
+    private final GameWorld world;
     private float airtime = 0.0f;
 
     private final SmartAnimation bodyIdle;
@@ -27,8 +28,9 @@ public class Player extends GravityObject {
     private float gcd = 0.0f;
     private final SmartSound soundGun;
 
-    public Player(PlatformGame game) {
+    public Player(GameWorld world, PlatformGame game) {
         super(game);
+        this.world = world;
 
         this.soundJump = game.assetManager.sound(this.destructor, "jump.wav");
         this.soundGun = game.assetManager.sound(this.destructor, "gun.wav");
@@ -93,10 +95,11 @@ public class Player extends GravityObject {
             }
         }
 
-        if( IsDown(Input.Keys.X, Input.Keys.CONTROL_LEFT)) {
+        if( IsDown(Input.Keys.X, Input.Keys.SPACE)) {
             if( gcd <= 0 ) {
                 this.soundGun.play();
                 gcd += GUNTIMER;
+                this.world.spawn(new Bullet(this.game).setup(this.getX(), this.getY(), this.isFacingRight()));
             }
         }
 

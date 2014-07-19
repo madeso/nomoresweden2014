@@ -5,10 +5,15 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Random;
+
 public class SmartAnimation extends SmartRegion {
     private float duration = 1;
     private int[][] frames = null;
     public Animation animation;
+    public boolean looping=true;
+
+
 
     public SmartAnimation(AssetManager assetManager, String name) {
         super(assetManager, name);
@@ -17,6 +22,11 @@ public class SmartAnimation extends SmartRegion {
     public SmartAnimation setAnimation(float duration, int[][] frames) {
         this.duration = duration;
         this.frames = frames;
+        return this;
+    }
+
+    public SmartAnimation setLooping(boolean loop ) {
+        this.looping = loop;
         return this;
     }
 

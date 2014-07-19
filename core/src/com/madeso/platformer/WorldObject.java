@@ -3,6 +3,7 @@ package com.madeso.platformer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
 import javafx.animation.Animation;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WorldObject implements Disposable, Moveable {
-    private final PlatformGame game;
+    protected final PlatformGame game;
 
     private float x = 0;
     private float y = 0;
@@ -21,6 +22,7 @@ public abstract class WorldObject implements Disposable, Moveable {
     private float suggestedY = 0;
     private boolean drawSuggested = false;
     private boolean collideWithWorld = true;
+    protected boolean removeMe = false;
     private List<AnimationGroup> groups = new ArrayList<AnimationGroup>();
 
     protected Destructor destructor = new Destructor();
@@ -51,11 +53,12 @@ public abstract class WorldObject implements Disposable, Moveable {
 
     protected abstract void subupdate(float dt);
 
-   void update(float dt) {
+   boolean update(float dt) {
        for(AnimationGroup g : groups) {
            g.update(dt);
        }
        subupdate(dt);
+       return this.removeMe;
    }
 
     protected AnimationGroup createGroup(SmartAnimation animation) {
@@ -74,7 +77,10 @@ public abstract class WorldObject implements Disposable, Moveable {
     public void subrender(AnimationGroup animation, SpriteBatch batch, OrthographicCamera cam) {
         float size = 64f;
 
-        TextureRegion reg = animation.getAnimation().getKeyFrame(animation.getTime(), true);
+        if( animation == null) throw new NullPointerException("animation is null");
+        if( animation.getAnimation()==null) throw new NullPointerException("get anim is null");
+
+        TextureRegion reg = animation.getAnimation().getKeyFrame(animation.getTime(), animation.isLooping());
 
         if( this.facingRight ) {
             batch.draw(reg, x, y, size, size);
@@ -127,5 +133,13 @@ public abstract class WorldObject implements Disposable, Moveable {
 
     public void faceRight() {
         this.facingRight = true;
+    }
+
+    public boolean isFacingRight() {
+        return this.facingRight;
+    }
+
+    public Rectangle getRect() {
+        return new Rectangle(this.x, this.y, 64, 64);
     }
 }

@@ -19,7 +19,7 @@ public class GameScreen implements Screen {
     PlatformGame game;
     Player dude;
     OrthoMap map;
-    List<WorldObject> moveables;
+    GameWorld moveables = new GameWorld();
     Music music;
     Destructor destructor = new Destructor();
 
@@ -29,32 +29,39 @@ public class GameScreen implements Screen {
         this.worldCamera = new OrthographicCamera( 640, 480 );
         this.fontCamera = PlatformGame.CreateTextCamera();
 
-        this.moveables = new ArrayList<WorldObject>();
-
         String levelpath = "level" + Integer.toString(id) + ".tmx";
         String musicpath = "music" + Integer.toString(id) + ".ogg";
 
         this.map = game.assetManager.orthoMap(destructor, levelpath);
 
-        this.dude = new Player(game);
+        this.dude = new Player(this.moveables, game);
         this.dude.teleport(70,70);
-        this.moveables.add(this.dude);
+        this.moveables.spawn(this.dude);
+
+        for(int i=1; i<=10; ++i) {
+            this.moveables.spawn(new Enemy(game, 140 + 70 * i, 70));
+        }
 
         music = Gdx.audio.newMusic(Gdx.files.internal(musicpath));
         music.setLooping(true);
-        // music.play();
+        music.play();
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        for (WorldObject m : moveables) {
-            m.update(delta);
-        }
-        for (Moveable m : moveables) {
-            m.applyMovement(this.map);
-        }
+        this.moveables.update(delta, this.map);
+
+        this.moveables.overlap(Bullet.class, Enemy.class, new GameWorld.Collision() {
+            @Override
+            public void collide(WorldObject left, WorldObject right) {
+                Bullet bullet = (Bullet)left;
+                Enemy enemy = (Enemy) right;
+                bullet.destroy();
+                enemy.hurt();
+            }
+        });
 
         cameraTrack(dude, worldCamera);
 
@@ -63,7 +70,7 @@ public class GameScreen implements Screen {
 
         this.map.render(worldCamera);
         game.batch.begin();
-        this.dude.render(game.batch, worldCamera);
+        this.moveables.render(game.batch, worldCamera);
         game.batch.end();
 
         this.fontCamera.update();
@@ -113,9 +120,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         this.destructor.dispose();
-        for (WorldObject m : moveables) {
-            m.dispose();
-        }
+        this.moveables.dispose();
         music.stop();
         music.dispose();
     }

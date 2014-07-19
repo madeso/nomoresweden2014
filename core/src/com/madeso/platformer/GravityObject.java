@@ -13,14 +13,16 @@ public abstract class GravityObject extends WorldObject {
     }
 
     @Override
-    void update(float dt) {
-        super.update(dt);
+    boolean update(float dt) {
+        boolean ret = super.update(dt);
         vy += gravity * dt;
         if( Math.abs(vy) > mvy ) {
             vy = Math.signum(vy) * mvy;
         }
         move(0, vy*dt);
         if( this.latestFlags.y() ) this.vy = 0;
+
+        return ret;
     }
 
     public boolean jump(float strength) {
