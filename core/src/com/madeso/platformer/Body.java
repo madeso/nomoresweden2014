@@ -10,6 +10,7 @@ public class Body extends GravityObject {
     private final SmartAnimation dying;
     private final SmartAnimation dead;
     private final AnimationGroup anim;
+    private final SmartSound sounddeath;
     private float dx = 0;
     private static Random random = new Random();
 
@@ -19,6 +20,7 @@ public class Body extends GravityObject {
         this.dying = game.assetManager.animation(this.destructor, "enemies.png").setAnimation(0.10f, new int[][]{ {layer,2} });
         this.dead = game.assetManager.animation(this.destructor, "enemies.png").setAnimation(0.10f, new int[][]{ {layer,3} });
         this.anim = this.createGroup(this.dying);
+        this.sounddeath = game.assetManager.sound(this.destructor, "enemydies.wav");
     }
 
     public void setup(float x, float y, boolean right, boolean direction) {
@@ -28,6 +30,7 @@ public class Body extends GravityObject {
         forcejump(150.0f + random.nextFloat() * 100.0f);
         dx = 1.0f;
         if( !direction ) dx = -1;
+        this.sounddeath.play();
 
         dx *= 0.5f + (random.nextFloat() / 0.5f);
     }
