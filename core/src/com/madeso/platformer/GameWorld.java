@@ -9,8 +9,10 @@ import java.util.List;
 
 public class GameWorld implements Disposable {
     List<WorldObject> objects = new ArrayList<WorldObject>();
+    List<WorldObject> special = new ArrayList<WorldObject>();
     boolean looping = false;
     List<WorldObject> objectsToAdd = new ArrayList<WorldObject>();
+    List<WorldObject> specialToRemove = new ArrayList<WorldObject>();
 
     List<WorldObject> objectsToRemove = new ArrayList<WorldObject>();
 
@@ -28,7 +30,21 @@ public class GameWorld implements Disposable {
         }
         objectsToRemove.clear();
 
+        for (WorldObject m : special) {
+            if( m.update(delta) ) {
+                specialToRemove.add(m);
+            }
+        }
+        special.removeAll(specialToRemove);
+        for (WorldObject m : specialToRemove) {
+            m.dispose();
+        }
+        specialToRemove.clear();
+
         for (Moveable m : objects) {
+            m.applyMovement(map);
+        }
+        for (Moveable m : special) {
             m.applyMovement(map);
         }
         looping = false;
@@ -50,9 +66,17 @@ public class GameWorld implements Disposable {
     }
 
     public void render(SpriteBatch batch, OrthographicCamera worldCamera) {
+        for (WorldObject m : special) {
+            m.render(batch, worldCamera);
+        }
+
         for (WorldObject m : objects) {
             m.render(batch, worldCamera);
         }
+    }
+
+    public void add(WorldObject body) {
+        this.special.add(body);
     }
 
     public static interface Collision {

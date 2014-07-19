@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
         this.moveables.spawn(this.dude);
 
         for(int i=1; i<=10; ++i) {
-            this.moveables.spawn(new Enemy(game, 140 + 70 * i, 70));
+            this.moveables.spawn(new Enemy(this.moveables, game, 140 + 70 * i, 70));
         }
 
         music = Gdx.audio.newMusic(Gdx.files.internal(musicpath));
@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
                 Bullet bullet = (Bullet)left;
                 Enemy enemy = (Enemy) right;
                 bullet.destroy();
-                enemy.hurt();
+                enemy.hurt(bullet.isFacingRight());
             }
         });
 

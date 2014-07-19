@@ -27,10 +27,14 @@ public abstract class GravityObject extends WorldObject {
 
     public boolean jump(float strength) {
         if( this.latestFlags.down ) {
-            this.vy = strength;
-            this.latestFlags.down = false;
+            forcejump(strength);
             return true;
         }
         return false;
+    }
+
+    protected void forcejump(float strength) {
+        this.vy = strength;
+        this.latestFlags.down = false;
     }
 }
