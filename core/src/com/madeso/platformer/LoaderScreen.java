@@ -41,7 +41,12 @@ public class LoaderScreen implements Screen {
         }
         else {
             if (game.assetManager.update()) {
-                this.loaded = true;
+                game.assetManager.finishLoading();
+                game.assetManager.postLoad();
+
+                if( game.assetManager.isFinished() ) {
+                    this.loaded = true;
+                }
             }
 
             // display loading information

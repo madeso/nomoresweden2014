@@ -10,7 +10,7 @@
  </layer>
  <layer name="black" width="40" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYMAO2JEwLQA7kZgY/SPRfaNgFAwkoDR/0BqMuo8yQKz7AHRfAeQ=
+   eJxjYMAOeJEwLQAvkZgY/SPRfaNgFAwkoDR/0BqMuo8yQKz7ABvyA4I=
   </data>
  </layer>
  <layer name="col" width="40" height="10">
@@ -18,4 +18,19 @@
    eJxjYmBgYMKCkQE2eUoxsQCbWmzuoyYYCu6jJKwpiQ9qgoG0mxhADfeRE86DKX6xmUNp/qA1GG7uGwhMLAAA6bYA5w==
   </data>
  </layer>
+ <objectgroup name="obj" width="40" height="10">
+  <object gid="8" x="512" y="576"/>
+  <object gid="8" x="576" y="576"/>
+  <object gid="8" x="448" y="576"/>
+  <object gid="8" x="384" y="576"/>
+  <object gid="8" x="320" y="576"/>
+  <object gid="12" x="1024" y="576"/>
+  <object gid="12" x="1088" y="576"/>
+  <object gid="12" x="1152" y="576"/>
+  <object gid="12" x="1216" y="576"/>
+  <object gid="4" x="1536" y="576"/>
+  <object gid="4" x="1600" y="576"/>
+  <object gid="4" x="1664" y="576"/>
+  <object gid="4" x="1728" y="576"/>
+ </objectgroup>
 </map>

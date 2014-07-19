@@ -68,7 +68,6 @@ public class Player extends GravityObject {
         GameState.update(dt);
 
         if( this.latestFlags.down && this.lastdown == false ) {
-            System.out.println(this.lastvy);
             if( this.lastvy < -600 ) {
                 this.soundHardThud.play();
             }

@@ -23,7 +23,7 @@ public class GameScreen implements Screen {
     Music music;
     Destructor destructor = new Destructor();
 
-    public GameScreen(PlatformGame game, int id) {
+    public GameScreen(final PlatformGame game, int id) {
         this.game = game;
 
         this.worldCamera = new OrthographicCamera( 640, 480 );
@@ -38,9 +38,29 @@ public class GameScreen implements Screen {
         this.dude.teleport(70,70);
         this.moveables.spawn(this.dude);
 
-        for(int i=1; i<=10; ++i) {
-            this.moveables.spawn(new Enemy(this.moveables, game, 140 + 70 * i, 70));
-        }
+        // ninja
+        this.map.registerCreator("4", new OrthoMap.ObjectCreator() {
+            @Override
+            public void create(OrthoMap map, float x, float y) {
+                moveables.spawn(new Enemy(moveables, game, x, y));
+            }
+        });
+
+        // agent
+        this.map.registerCreator("8", new OrthoMap.ObjectCreator() {
+            @Override
+            public void create(OrthoMap map, float x, float y) {
+                moveables.spawn(new Enemy(moveables, game, x, y));
+            }
+        });
+
+        // suicidal
+        this.map.registerCreator("12", new OrthoMap.ObjectCreator() {
+            @Override
+            public void create(OrthoMap map, float x, float y) {
+                moveables.spawn(new Enemy(moveables, game, x, y));
+            }
+        });
 
         music = Gdx.audio.newMusic(Gdx.files.internal(musicpath));
         music.setLooping(true);

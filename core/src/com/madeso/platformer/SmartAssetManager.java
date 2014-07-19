@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SmartAssetManager implements Disposable {
     private final AssetManager assetManager;
-    private final List<PostLoader> assetsToLoad;
+    private List<PostLoader> assetsToLoad;
 
     public SmartAssetManager() {
         this.assetManager = new AssetManager();
@@ -28,10 +28,16 @@ public class SmartAssetManager implements Disposable {
     }
 
     public void postLoad() {
-        for(PostLoader asset: assetsToLoad) {
+        List<PostLoader> assets = new ArrayList<PostLoader>(assetsToLoad);
+        this.assetsToLoad.clear();
+        for(PostLoader asset: assets) {
             asset.postLoad();
         }
-        assetsToLoad.clear();
+        assets.clear();
+    }
+
+    public boolean isFinished() {
+        return this.assetsToLoad.isEmpty();
     }
 
     public void onPostLoad(PostLoader pl) {
