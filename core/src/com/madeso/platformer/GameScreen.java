@@ -10,6 +10,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameScreen implements Screen {
     static final float UNITS_PER_METER = 1f;
     private final OrthographicCamera fontCamera;
@@ -17,6 +20,7 @@ public class GameScreen implements Screen {
     PlatformGame game;
     Dude dude;
     OrthoMap map;
+    List<Moveable> moveables;
 
     public GameScreen(PlatformGame game, String path) {
         this.game = game;
@@ -24,11 +28,15 @@ public class GameScreen implements Screen {
         this.worldCamera = new OrthographicCamera( 640, 480 );
         this.fontCamera = PlatformGame.CreateTextCamera();
 
+
+        this.moveables = new ArrayList<Moveable>();
+
         this.map = game.assetManager.orthoMap(path);
 
         this.dude = new Dude(game);
-        this.dude.x = 64;
-        this.dude.y = 64;
+        this.dude.teleport(68,68);
+        this.moveables.add(this.dude);
+
     }
 
     @Override
@@ -38,6 +46,7 @@ public class GameScreen implements Screen {
 
         movePlayer(dude, delta, 64);
 
+        this.map.move(moveables);
         cameraTrack(dude, worldCamera);
 
         worldCamera.update();
@@ -56,8 +65,8 @@ public class GameScreen implements Screen {
     }
 
     private void cameraTrack(Dude dude, OrthographicCamera camera) {
-        camera.position.x = NiceValue(dude.x);
-        camera.position.y = NiceValue(dude.y);
+        camera.position.x = NiceValue(dude.getX());
+        camera.position.y = NiceValue(dude.getY());
     }
 
     private float NiceValue(float x) {
@@ -85,6 +94,10 @@ public class GameScreen implements Screen {
 
         if( IsDown(Input.Keys.DOWN, Input.Keys.S) ) {
             dy -= 1;
+        }
+
+        if( IsDown(Input.Keys.SHIFT_LEFT, Input.Keys.SHIFT_RIGHT)) {
+            speed = speed * 0.01f;
         }
 
         dx *= delta * speed;
