@@ -40,12 +40,6 @@ public class OrthoMap implements SuperAsset {
         this.renderer.render();
     }
 
-    public void move(List<Moveable> moveables) {
-        for (Moveable m : moveables) {
-            m.applyMovement(this);
-        }
-    }
-
     private static float ONE = 0.99f;
 
     public SweptCollisionUtil.ColResult sweptAABB(float px, float py, float tx, float ty, int w, int h) {

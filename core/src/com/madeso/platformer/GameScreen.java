@@ -5,8 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
@@ -20,7 +18,7 @@ public class GameScreen implements Screen {
     PlatformGame game;
     Dude dude;
     OrthoMap map;
-    List<Moveable> moveables;
+    List<WorldObject> moveables;
 
     public GameScreen(PlatformGame game, String path) {
         this.game = game;
@@ -28,7 +26,7 @@ public class GameScreen implements Screen {
         this.worldCamera = new OrthographicCamera( 640, 480 );
         this.fontCamera = PlatformGame.CreateTextCamera();
 
-        this.moveables = new ArrayList<Moveable>();
+        this.moveables = new ArrayList<WorldObject>();
 
         this.map = game.assetManager.orthoMap(path);
 
@@ -43,10 +41,14 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        movePlayer(dude, delta, 64);
-        dude.update(delta);
+        movePlayer(dude, delta);
+        for (WorldObject m : moveables) {
+            m.update(delta);
+        }
+        for (Moveable m : moveables) {
+            m.applyMovement(this.map);
+        }
 
-        this.map.move(moveables);
         cameraTrack(dude, worldCamera);
 
         worldCamera.update();
@@ -64,7 +66,7 @@ public class GameScreen implements Screen {
         game.batch.end();
     }
 
-    private void cameraTrack(Dude dude, OrthographicCamera camera) {
+    private void cameraTrack(WorldObject dude, OrthographicCamera camera) {
         camera.position.x = NiceValue(dude.getX());
         camera.position.y = NiceValue(dude.getY());
     }
@@ -76,9 +78,9 @@ public class GameScreen implements Screen {
         return MathUtils.round(smooth * x) / smooth;
     }
 
-    private void movePlayer(Dude player, float delta, float speed) {
+    private void movePlayer(Dude player, float delta) {
         float dx = 0;
-        float dy = 0;
+        float speed = 64 * 3;
 
         if( IsDown(Input.Keys.LEFT, Input.Keys.A) ) {
             dx -= 1;
@@ -89,11 +91,7 @@ public class GameScreen implements Screen {
         }
 
         if( IsDown(Input.Keys.UP, Input.Keys.W) ) {
-            dy += 1;
-        }
-
-        if( IsDown(Input.Keys.DOWN, Input.Keys.S) ) {
-            dy -= 1;
+            player.jump(100);
         }
 
         if( IsDown(Input.Keys.SHIFT_LEFT, Input.Keys.SHIFT_RIGHT)) {
@@ -101,8 +99,7 @@ public class GameScreen implements Screen {
         }
 
         dx *= delta * speed;
-        dy *= delta * speed;
-        player.move(dx,dy);
+        player.move(dx,0);
     }
 
     private boolean IsDown(int a, int b) {

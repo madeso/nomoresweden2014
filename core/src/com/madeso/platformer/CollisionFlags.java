@@ -7,6 +7,14 @@ public class CollisionFlags {
     public boolean left = false;
 
     public boolean collided() {
-        return up || down || left || right;
+        return x() || y();
+    }
+
+    public boolean y() {
+        return up || down;
+    }
+
+    public boolean x() {
+        return left || right;
     }
 }

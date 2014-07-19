@@ -1,104 +1,42 @@
 package com.madeso.platformer;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Disposable;
-
-public class Dude implements Disposable, Moveable {
-    private final PlatformGame game;
-    private final SmartAnimation img;
-
-    private float x = 0;
-    private float y = 0;
-
-    private float targetX = 0;
-    private float targetY = 0;
-    private float suggestedX = 0;
-    private float suggestedY = 0;
-    private float time = 0.0f;
-    private boolean drawSuggested = false;
-    private boolean collideWithWorld = true;
-
-    private CollisionFlags latestFlags = new CollisionFlags();
+public class Dude extends WorldObject {
+    private final SmartAnimation animation;
+    float vy = 0;
+    float mvy = 64*20;
+    float gravity = -600;
 
     public Dude(PlatformGame game) {
-        this.game = game;
-        this.img = game.assetManager.animation("player.png").setAnimation(0.25f, new int[][]{{0,0}, {0,1}});
+        super(game);
+
+        this.animation = game.assetManager.animation("player.png").setAnimation(0.5f, new int[][]{ {0,0}, {0,1} });
+    }
+
+    @Override
+    SmartAnimation getAnimation() {
+        return animation;
     }
 
     @Override
     public void dispose() {
-        this.img.dispose();
-    }
-
-    public void teleport(float x, float y) {
-        this.x = x;
-        this.y = y;
-        this.targetX = x;
-        this.targetY = y;
-    }
-
-    public void move(float dx, float dy) {
-        targetX += dx;
-        targetY += dy;
-    }
-
-
-   void update(float dt) {
-       this.time += dt;
-   }
-
-    SmartAnimation getAnimation() {
-        return this.img;
+        this.animation.dispose();
     }
 
     @Override
-    public String toString() {
-        return Float.toString(suggestedX) + "," + Float.toString(suggestedY);
-    }
-
-    public void render(SpriteBatch batch, OrthographicCamera cam) {
-        float size = 64f;
-
-        TextureRegion reg = getAnimation().animation.getKeyFrame(this.time, true);
-
-        batch.draw(reg, x, y, size, size);
-
-        if( this.drawSuggested ) {
-            batch.setColor(1, 0, 0, 0.5f);
-            batch.draw(reg, suggestedX, suggestedY, size, size);
-            batch.setColor(1, 1, 1, 1);
+    void update(float dt) {
+        super.update(dt);
+        vy += gravity * dt;
+        if( Math.abs(vy) > mvy ) {
+            vy = Math.signum(vy) * mvy;
         }
+        move(0, vy*dt);
+        if( this.latestFlags.y() ) this.vy = 0;
     }
 
-    @Override
-    public void applyMovement(OrthoMap map) {
-        CollisionData cd = map.basic(x, y, targetX, targetY, 64, 64);
-        suggestedX = cd.x;
-        suggestedY = cd.y;
-        this.latestFlags = cd.flags;
-
-        // update position
-        if( this.collideWithWorld ) {
-            this.x = suggestedX;
-            this.y = suggestedY;
+    public void jump(float strength) {
+        if( this.latestFlags.down ) {
+            this.vy = 500;
+            this.latestFlags.down = false;
         }
-        else {
-            this.x = targetX;
-            this.y = targetY;
-        }
-
-        // update movement code
-        this.targetX = this.x;
-        this.targetY = this.y;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
     }
 }
