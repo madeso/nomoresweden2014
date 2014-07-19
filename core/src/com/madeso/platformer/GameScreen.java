@@ -17,10 +17,11 @@ public class GameScreen implements Screen {
     private final OrthographicCamera fontCamera;
     private OrthographicCamera worldCamera;
     PlatformGame game;
-    Dude dude;
+    Player dude;
     OrthoMap map;
     List<WorldObject> moveables;
     Music music;
+    Destructor destructor = new Destructor();
 
     public GameScreen(PlatformGame game, int id) {
         this.game = game;
@@ -33,9 +34,9 @@ public class GameScreen implements Screen {
         String levelpath = "level" + Integer.toString(id) + ".tmx";
         String musicpath = "music" + Integer.toString(id) + ".ogg";
 
-        this.map = game.assetManager.orthoMap(levelpath);
+        this.map = game.assetManager.orthoMap(destructor, levelpath);
 
-        this.dude = new Dude(game);
+        this.dude = new Player(game);
         this.dude.teleport(70,70);
         this.moveables.add(this.dude);
 
@@ -48,8 +49,6 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        movePlayer(dude, delta);
         for (WorldObject m : moveables) {
             m.update(delta);
         }
@@ -86,34 +85,6 @@ public class GameScreen implements Screen {
         return MathUtils.round(smooth * x) / smooth;
     }
 
-    private void movePlayer(Dude player, float delta) {
-        float dx = 0;
-        float speed = 64 * 3;
-
-        if( IsDown(Input.Keys.LEFT, Input.Keys.A) ) {
-            dx -= 1;
-        }
-
-        if( IsDown(Input.Keys.RIGHT, Input.Keys.D) ) {
-            dx += 1;
-        }
-
-        if( IsDown(Input.Keys.UP, Input.Keys.W) ) {
-            player.jump(100);
-        }
-
-        if( IsDown(Input.Keys.SHIFT_LEFT, Input.Keys.SHIFT_RIGHT)) {
-            speed = speed * 0.01f;
-        }
-
-        dx *= delta * speed;
-        player.move(dx,0);
-    }
-
-    private boolean IsDown(int a, int b) {
-        return Gdx.input.isKeyPressed(a) || Gdx.input.isKeyPressed(b);
-    }
-
     @Override
     public void resize(int width, int height) {
         Vector3 oldPos = new Vector3(worldCamera.position);
@@ -141,8 +112,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        this.map.dispose();
-        dude.dispose();
+        this.destructor.dispose();
+        for (WorldObject m : moveables) {
+            m.dispose();
+        }
         music.stop();
         music.dispose();
     }

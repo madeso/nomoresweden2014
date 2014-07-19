@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
+import javafx.animation.Animation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class WorldObject implements Disposable, Moveable {
     private final PlatformGame game;
@@ -15,9 +19,11 @@ public abstract class WorldObject implements Disposable, Moveable {
     private float targetY = 0;
     private float suggestedX = 0;
     private float suggestedY = 0;
-    private float time = 0.0f;
     private boolean drawSuggested = false;
     private boolean collideWithWorld = true;
+    private List<AnimationGroup> groups = new ArrayList<AnimationGroup>();
+
+    protected Destructor destructor = new Destructor();
 
     protected CollisionFlags latestFlags = new CollisionFlags();
 
@@ -27,6 +33,7 @@ public abstract class WorldObject implements Disposable, Moveable {
 
     @Override
     public void dispose() {
+        destructor.dispose();
     }
 
     public void teleport(float x, float y) {
@@ -41,10 +48,20 @@ public abstract class WorldObject implements Disposable, Moveable {
         targetY += dy;
     }
 
+    protected abstract void subupdate(float dt);
 
    void update(float dt) {
-       this.time += dt;
+       for(AnimationGroup g : groups) {
+           g.update(dt);
+       }
+       subupdate(dt);
    }
+
+    protected AnimationGroup createGroup(SmartAnimation animation) {
+        AnimationGroup g = new AnimationGroup(animation);
+        this.groups.add(g);
+        return g;
+    }
 
     @Override
     public String toString() {
@@ -53,10 +70,10 @@ public abstract class WorldObject implements Disposable, Moveable {
 
     public abstract void render(SpriteBatch batch, OrthographicCamera cam);
 
-    public void subrender(SmartAnimation animation, SpriteBatch batch, OrthographicCamera cam) {
+    public void subrender(AnimationGroup animation, SpriteBatch batch, OrthographicCamera cam) {
         float size = 64f;
 
-        TextureRegion reg = animation.animation.getKeyFrame(this.time, true);
+        TextureRegion reg = animation.getAnimation().getKeyFrame(animation.getTime(), true);
 
         batch.draw(reg, x, y, size, size);
 

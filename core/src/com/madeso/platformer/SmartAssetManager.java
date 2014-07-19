@@ -20,9 +20,10 @@ public class SmartAssetManager implements Disposable {
         assetsToLoad = new ArrayList<PostLoader>();
     }
     
-    public SmartTexture texture(String name) {
+    public SmartTexture texture(Destructor destructor, String name) {
         SmartTexture texture = new SmartTexture(this.assetManager, name);
         assetsToLoad.add(texture);
+        destructor.add(texture);
         return texture;
     }
 
@@ -54,21 +55,23 @@ public class SmartAssetManager implements Disposable {
         return this.assetManager.getProgress();
     }
 
-    public OrthoMap orthoMap(String path) {
+    public OrthoMap orthoMap(Destructor destructor, String path) {
         OrthoMap map = new OrthoMap(this.assetManager, path);
         assetsToLoad.add(map);
+        destructor.add(map);
         return map;
     }
 
-    public SmartRegion region(String name) {
+    public SmartRegion region(Destructor destructor, String name) {
         SmartRegion region = new SmartRegion(this.assetManager, name);
         assetsToLoad.add(region);
         return region;
     }
 
-    public SmartAnimation animation(String name) {
+    public SmartAnimation animation(Destructor destructor, String name) {
         SmartAnimation animation = new SmartAnimation(this.assetManager, name);
         assetsToLoad.add(animation);
+        destructor.add(animation);
         return animation;
     }
 }
