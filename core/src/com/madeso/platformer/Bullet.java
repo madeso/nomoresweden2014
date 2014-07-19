@@ -40,7 +40,7 @@ public class Bullet extends WorldObject {
             dx = 1;
         }
         if( this.group.getTime() > FLASHTIME ) {
-            move(dx * dt * 600, 0);
+            move(dx * dt * 800, 0);
         }
 
         if( this.latestFlags.collided() ) {

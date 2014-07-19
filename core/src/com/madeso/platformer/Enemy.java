@@ -6,18 +6,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.Random;
 
 public class Enemy extends GravityObject {
-    private static Random random = new Random();
     private final SmartAnimation runa;
     private final AnimationGroup run;
     private Body body;
     private final GameWorld world;
     private int health = 3;
 
-    public Enemy(GameWorld world, PlatformGame game, float x,float y) {
+    public Enemy(GameWorld world, PlatformGame game, float x,float y, int layer) {
         super(game);
         this.world = world;
         this.teleport(x,y);
-        int layer = Enemy.random.nextInt(3);
         this.runa = game.assetManager.animation(this.destructor, "enemies.png").setAnimation(0.10f, new int[][]{ {layer,0}, {layer, 1} });
         this.run = this.createGroup(this.runa);
         this.body = new Body(game, layer);

@@ -19,11 +19,6 @@
   </data>
  </layer>
  <objectgroup name="obj" width="40" height="10">
-  <object gid="8" x="512" y="576"/>
-  <object gid="8" x="576" y="576"/>
-  <object gid="8" x="448" y="576"/>
-  <object gid="8" x="384" y="576"/>
-  <object gid="8" x="320" y="576"/>
   <object gid="12" x="1024" y="576"/>
   <object gid="12" x="1088" y="576"/>
   <object gid="12" x="1152" y="576"/>
@@ -32,5 +27,15 @@
   <object gid="4" x="1600" y="576"/>
   <object gid="4" x="1664" y="576"/>
   <object gid="4" x="1728" y="576"/>
+  <object gid="8" x="1856" y="320"/>
+  <object gid="8" x="1920" y="320"/>
+  <object gid="8" x="1984" y="320"/>
+  <object gid="8" x="2048" y="320"/>
+  <object gid="8" x="2112" y="320"/>
+  <object gid="8" x="2176" y="320"/>
+  <object gid="8" x="2240" y="320"/>
+  <object gid="8" x="2304" y="320"/>
+  <object gid="8" x="2368" y="320"/>
+  <object gid="8" x="2432" y="320"/>
  </objectgroup>
 </map>

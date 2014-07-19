@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
         this.map.registerCreator("4", new OrthoMap.ObjectCreator() {
             @Override
             public void create(OrthoMap map, float x, float y) {
-                moveables.spawn(new Enemy(moveables, game, x, y));
+                moveables.spawn(new Enemy(moveables, game, x, y, 0));
             }
         });
 
@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
         this.map.registerCreator("8", new OrthoMap.ObjectCreator() {
             @Override
             public void create(OrthoMap map, float x, float y) {
-                moveables.spawn(new Enemy(moveables, game, x, y));
+                moveables.spawn(new Enemy(moveables, game, x, y, 1));
             }
         });
 
@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
         this.map.registerCreator("12", new OrthoMap.ObjectCreator() {
             @Override
             public void create(OrthoMap map, float x, float y) {
-                moveables.spawn(new Enemy(moveables, game, x, y));
+                moveables.spawn(new Enemy(moveables, game, x, y, 2));
             }
         });
 
