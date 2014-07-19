@@ -20,6 +20,8 @@ public class Dude implements Disposable, Moveable {
     private boolean drawSuggested = false;
     private boolean collideWithWorld = true;
 
+    private CollisionFlags latestFlags = new CollisionFlags();
+
     public Dude(PlatformGame game) {
         this.game = game;
         this.img = game.assetManager.animation("player.png").setAnimation(0.25f, new int[][]{{0,0}, {0,1}});
@@ -75,6 +77,7 @@ public class Dude implements Disposable, Moveable {
         CollisionData cd = map.basic(x, y, targetX, targetY, 64, 64);
         suggestedX = cd.x;
         suggestedY = cd.y;
+        this.latestFlags = cd.flags;
 
         // update position
         if( this.collideWithWorld ) {

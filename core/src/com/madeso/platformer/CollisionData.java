@@ -1,17 +1,17 @@
 package com.madeso.platformer;
 
 public class CollisionData {
-    public boolean collided = false;
+    public CollisionFlags flags = new CollisionFlags();
 
     public CollisionData(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public CollisionData(float x, float y, boolean collided) {
+    public CollisionData(float x, float y, CollisionFlags flags) {
         this.x = x;
         this.y = y;
-        this.collided = collided;
+        this.flags = flags;
     }
 
     public float x;

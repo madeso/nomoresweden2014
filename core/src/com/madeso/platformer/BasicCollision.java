@@ -34,18 +34,23 @@ public class BasicCollision {
 
     private static Array<Rectangle> tiles = new Array<Rectangle>();
 
-    private static void SubSimple(TiledMap map, Vector2 position, Vector2 velocity, float width, float height) {
-        boolean grounded = false;
+    private static CollisionFlags SubSimple(TiledMap map, Vector2 position, Vector2 velocity, float width, float height) {
+        CollisionFlags flags = new CollisionFlags();
         // perform collision detection & response, on each axis, separately
         // if the koala is moving right, check the tiles to the right of it's
         // right bounding box edge, otherwise check the ones to the left
         Rectangle koalaRect = rectPool.obtain();
         koalaRect.set(position.x, position.y, width, height);
         int startX, startY, endX, endY;
+
+        boolean right = true;
+
         if (velocity.x > 0) {
             startX = endX = (int)(position.x + width + velocity.x);
+            right = true;
         } else {
             startX = endX = (int)(position.x + velocity.x);
+            right = false;
         }
         startY = (int)(position.y);
         endY = (int)(position.y + height);
@@ -54,6 +59,12 @@ public class BasicCollision {
         for (Rectangle tile : tiles) {
             if (koalaRect.overlaps(tile)) {
                 velocity.x = 0;
+                if( right ) {
+                    flags.right = true;
+                }
+                else {
+                    flags.left = true;
+                }
                 break;
             }
         }
@@ -80,19 +91,22 @@ public class BasicCollision {
                     // we hit a block jumping upwards, let's destroy it!
                     // TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(1);
                     // layer.setCell((int)tile.x, (int)tile.y, null);
+                    flags.up = true;
                 } else {
                     position.y = tile.y + tile.height;
                     // if we hit the ground, mark us as grounded so we can jump
-                    grounded = true;
+                    flags.down = true;
                 }
                 velocity.y = 0;
                 break;
             }
         }
         rectPool.free(koalaRect);
+
+        return flags;
     }
 
-    public static void Simple(TiledMap map, Vector2 position, Vector2 velocity, float width, float height) {
+    public static CollisionFlags Simple(TiledMap map, Vector2 position, Vector2 velocity, float width, float height) {
         float tw = 64;
         float th = 64;
         position.x /= tw;
@@ -100,11 +114,16 @@ public class BasicCollision {
         velocity.x /= tw;
         velocity.y /= th;
 
-        SubSimple(map, position, velocity, width/tw, height/th);
+        CollisionFlags flags = SubSimple(map, position, velocity, width/tw, height/th);
 
         position.x *= tw;
         position.y *= th;
         velocity.x *= tw;
         velocity.y *= th;
+
+        position.x += velocity.x;
+        position.y += velocity.y;
+
+        return flags;
     }
 }

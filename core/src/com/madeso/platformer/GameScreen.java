@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
         this.map = game.assetManager.orthoMap(path);
 
         this.dude = new Dude(game);
-        this.dude.teleport(68,68);
+        this.dude.teleport(70,70);
         this.moveables.add(this.dude);
 
     }

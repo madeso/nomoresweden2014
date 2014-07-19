@@ -72,13 +72,8 @@ public class OrthoMap implements SuperAsset {
     public CollisionData basic(float x, float y, float tx, float ty, float w, float h) {
         Vector2 p = new Vector2(x,y);
         Vector2 d = new Vector2(tx-x,ty-y);
-        BasicCollision.Simple(this.map, p, d, w, h);
-        return new CollisionData(p.x, p.y);
-    }
-
-    public CollisionData stop(float px, float py, float ptx, float pty, int w, int h) {
-        SweptCollisionUtil.ColResult res = sweptAABB(px, py, ptx, pty, w, h);
-        return new CollisionData(res.x, res.y, res.ret < ONE);
+        CollisionFlags flags = BasicCollision.Simple(this.map, p, d, w, h);
+        return new CollisionData(p.x, p.y, flags);
     }
 
     public CollisionData slide(float px, float py, float ptx, float pty, int w, int h) {
