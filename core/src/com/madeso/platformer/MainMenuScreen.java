@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 public class MainMenuScreen implements Screen {
     final PlatformGame game;
 
+    float waiter = 0;
+
     OrthographicCamera camera;
 
     public MainMenuScreen(final PlatformGame game) {
@@ -29,7 +31,9 @@ public class MainMenuScreen implements Screen {
         game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
         game.batch.end();
 
-        if (Gdx.input.isTouched()) {
+        waiter += delta;
+
+        if (waiter > 1.0f && Gdx.input.isTouched()) {
             GameScreen.LoadWorld(game, 1);
             dispose();
         }

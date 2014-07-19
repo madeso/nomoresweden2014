@@ -17,6 +17,7 @@ public class Player extends GravityObject {
     private final SmartSound soundSoftThud;
     private final GameWorld world;
     private final SmartAnimation headMurder;
+    private PlayerBody pbody;
     private float airtime = 0.0f;
 
     private final SmartAnimation bodyIdle;
@@ -29,9 +30,17 @@ public class Player extends GravityObject {
     private float gcd = 0.0f;
     private final SmartSound soundGun;
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        if( this.pbody != null )
+            this.pbody.dispose();
+    }
+
     public Player(GameWorld world, PlatformGame game) {
         super(game);
         this.world = world;
+        this.pbody = new PlayerBody(game);
 
         this.soundJump = game.assetManager.sound(this.destructor, "jump.wav");
         this.soundGun = game.assetManager.sound(this.destructor, "gun.wav");
@@ -164,5 +173,14 @@ public class Player extends GravityObject {
         subrender(this.body, batch, cam);
         subrender(this.head, batch, cam);
         subrender(this.gun, batch, cam);
+    }
+
+    public PlayerBody kill(boolean other) {
+        this.removeMe = true;
+        world.add(this.pbody);
+        this.pbody.setup(this.getX(), this.getY(), this.isFacingRight(), other);
+        PlayerBody ret = this.pbody;
+        this.pbody = null;
+        return ret;
     }
 }

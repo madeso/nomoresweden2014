@@ -17,7 +17,7 @@ public class GameScreen implements Screen {
     private final OrthographicCamera fontCamera;
     private OrthographicCamera worldCamera;
     PlatformGame game;
-    Player dude;
+    WorldObject dude;
     OrthoMap map;
     GameWorld moveables = new GameWorld();
     Music music;
@@ -34,9 +34,11 @@ public class GameScreen implements Screen {
 
         this.map = game.assetManager.orthoMap(destructor, levelpath);
 
-        this.dude = new Player(this.moveables, game);
-        this.dude.teleport(70,70);
-        this.moveables.spawn(this.dude);
+        Player p = new Player(this.moveables, game);
+        p.teleport(70,70);
+        this.moveables.spawn(p);
+
+        this.dude = p;
 
         // ninja
         this.map.registerCreator("4", new OrthoMap.ObjectCreator() {
@@ -71,7 +73,13 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        this.moveables.update(delta, this.map);
+        this.moveables.update(delta * GameState.dt, this.map);
+
+        if( GameState.dt > 0.9f && Gdx.input.isTouched() && dude.getClass() == PlayerBody.class ) {
+            game.setScreen(new MainMenuScreen(game));
+            this.dispose();
+            return;
+        }
 
         this.moveables.overlap(Bullet.class, Enemy.class, new GameWorld.Collision() {
             @Override
@@ -80,6 +88,16 @@ public class GameScreen implements Screen {
                 Enemy enemy = (Enemy) right;
                 bullet.destroy();
                 enemy.hurt(bullet.isFacingRight());
+            }
+        });
+
+        this.moveables.overlap(Player.class, Enemy.class, new GameWorld.Collision() {
+            @Override
+            public void collide(WorldObject left, WorldObject right) {
+                Player player = (Player)left;
+                Enemy other = (Enemy) right;
+                dude = player.kill(other.isFacingRight());
+                GameState.dt = 0.2f;
             }
         });
 
@@ -96,13 +114,15 @@ public class GameScreen implements Screen {
         this.fontCamera.update();
         this.game.batch.setProjectionMatrix(fontCamera.combined);
         game.batch.begin();
-        game.font.draw(game.batch, "gamestuff " + dude.toString(), 20, 20);
+        game.font.draw(game.batch, "gamestuff", 20, 20);
         game.batch.end();
     }
 
     private void cameraTrack(WorldObject dude, OrthographicCamera camera) {
-        camera.position.x = NiceValue(dude.getX());
-        camera.position.y = NiceValue(dude.getY());
+        if( dude != null ) {
+            camera.position.x = NiceValue(dude.getX());
+            camera.position.y = NiceValue(dude.getY());
+        }
     }
 
     private float NiceValue(float x) {
