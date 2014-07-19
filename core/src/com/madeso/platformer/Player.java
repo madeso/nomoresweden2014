@@ -49,11 +49,13 @@ public class Player extends GravityObject {
         if( IsDown(Input.Keys.LEFT, Input.Keys.A) ) {
             dx -= 1;
             moving = true;
+            this.faceLeft();
         }
 
         if( IsDown(Input.Keys.RIGHT, Input.Keys.D) ) {
             dx += 1;
             moving = true;
+            this.faceRight();
         }
 
         if( IsDown(Input.Keys.UP, Input.Keys.W) ) {

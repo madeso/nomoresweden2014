@@ -26,6 +26,7 @@ public abstract class WorldObject implements Disposable, Moveable {
     protected Destructor destructor = new Destructor();
 
     protected CollisionFlags latestFlags = new CollisionFlags();
+    private boolean facingRight = false;
 
     public WorldObject(PlatformGame game) {
         this.game = game;
@@ -75,7 +76,13 @@ public abstract class WorldObject implements Disposable, Moveable {
 
         TextureRegion reg = animation.getAnimation().getKeyFrame(animation.getTime(), true);
 
-        batch.draw(reg, x, y, size, size);
+        if( this.facingRight ) {
+            batch.draw(reg, x, y, size, size);
+        }
+        else {
+            batch.draw(reg, x+size, y, -size, size);
+        }
+
 
         if( this.drawSuggested ) {
             batch.setColor(1, 0, 0, 0.5f);
@@ -112,5 +119,13 @@ public abstract class WorldObject implements Disposable, Moveable {
 
     public float getY() {
         return y;
+    }
+
+    public void faceLeft() {
+        this.facingRight = false;
+    }
+
+    public void faceRight() {
+        this.facingRight = true;
     }
 }
