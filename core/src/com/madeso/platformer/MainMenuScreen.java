@@ -30,7 +30,7 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            GameScreen.LoadWorld(game, "level1.tmx");
+            GameScreen.LoadWorld(game, 1);
             dispose();
         }
     }

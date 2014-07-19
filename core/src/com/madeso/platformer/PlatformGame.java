@@ -16,7 +16,7 @@ public class PlatformGame extends Game {
         this.font = new BitmapFont();
         this.assetManager = new SmartAssetManager();
         // this.setScreen(new MainMenuScreen(this));
-        GameScreen.LoadWorld(this, "level1.tmx");
+        GameScreen.LoadWorld(this, 1);
 	}
 
 	@Override

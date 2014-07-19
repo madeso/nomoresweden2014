@@ -1,5 +1,8 @@
 package com.madeso.platformer;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class Dude extends WorldObject {
     private final SmartAnimation animation;
     float vy = 0;
@@ -11,12 +14,6 @@ public class Dude extends WorldObject {
 
         this.animation = game.assetManager.animation("player.png").setAnimation(0.5f, new int[][]{ {0,0}, {0,1} });
     }
-
-    @Override
-    SmartAnimation getAnimation() {
-        return animation;
-    }
-
     @Override
     public void dispose() {
         this.animation.dispose();
@@ -31,6 +28,11 @@ public class Dude extends WorldObject {
         }
         move(0, vy*dt);
         if( this.latestFlags.y() ) this.vy = 0;
+    }
+
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera cam) {
+        this.subrender(this.animation, batch, cam);
     }
 
     public void jump(float strength) {

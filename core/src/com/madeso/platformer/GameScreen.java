@@ -3,6 +3,7 @@ package com.madeso.platformer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,8 +20,9 @@ public class GameScreen implements Screen {
     Dude dude;
     OrthoMap map;
     List<WorldObject> moveables;
+    Music music;
 
-    public GameScreen(PlatformGame game, String path) {
+    public GameScreen(PlatformGame game, int id) {
         this.game = game;
 
         this.worldCamera = new OrthographicCamera( 640, 480 );
@@ -28,12 +30,18 @@ public class GameScreen implements Screen {
 
         this.moveables = new ArrayList<WorldObject>();
 
-        this.map = game.assetManager.orthoMap(path);
+        String levelpath = "level" + Integer.toString(id) + ".tmx";
+        String musicpath = "music" + Integer.toString(id) + ".ogg";
+
+        this.map = game.assetManager.orthoMap(levelpath);
 
         this.dude = new Dude(game);
         this.dude.teleport(70,70);
         this.moveables.add(this.dude);
 
+        music = Gdx.audio.newMusic(Gdx.files.internal(musicpath));
+        music.setLooping(true);
+        // music.play();
     }
 
     @Override
@@ -135,9 +143,11 @@ public class GameScreen implements Screen {
     public void dispose() {
         this.map.dispose();
         dude.dispose();
+        music.stop();
+        music.dispose();
     }
 
-    public static void LoadWorld(PlatformGame game, String path) {
-        game.setScreen(new LoaderScreen(game, new GameScreen(game, path)));
+    public static void LoadWorld(PlatformGame game, int id) {
+        game.setScreen(new LoaderScreen(game, new GameScreen(game, id)));
     }
 }

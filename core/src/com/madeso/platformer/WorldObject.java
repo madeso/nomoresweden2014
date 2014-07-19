@@ -46,17 +46,17 @@ public abstract class WorldObject implements Disposable, Moveable {
        this.time += dt;
    }
 
-    abstract SmartAnimation getAnimation();
-
     @Override
     public String toString() {
         return Float.toString(suggestedX) + "," + Float.toString(suggestedY);
     }
 
-    public void render(SpriteBatch batch, OrthographicCamera cam) {
+    public abstract void render(SpriteBatch batch, OrthographicCamera cam);
+
+    public void subrender(SmartAnimation animation, SpriteBatch batch, OrthographicCamera cam) {
         float size = 64f;
 
-        TextureRegion reg = getAnimation().animation.getKeyFrame(this.time, true);
+        TextureRegion reg = animation.animation.getKeyFrame(this.time, true);
 
         batch.draw(reg, x, y, size, size);
 
