@@ -59,4 +59,16 @@ public class SmartAssetManager implements Disposable {
         assetsToLoad.add(map);
         return map;
     }
+
+    public SmartRegion region(String name) {
+        SmartRegion region = new SmartRegion(this.assetManager, name);
+        assetsToLoad.add(region);
+        return region;
+    }
+
+    public SmartAnimation animation(String name) {
+        SmartAnimation animation = new SmartAnimation(this.assetManager, name);
+        assetsToLoad.add(animation);
+        return animation;
+    }
 }

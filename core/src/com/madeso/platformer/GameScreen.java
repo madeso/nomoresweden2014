@@ -28,7 +28,6 @@ public class GameScreen implements Screen {
         this.worldCamera = new OrthographicCamera( 640, 480 );
         this.fontCamera = PlatformGame.CreateTextCamera();
 
-
         this.moveables = new ArrayList<Moveable>();
 
         this.map = game.assetManager.orthoMap(path);
@@ -45,6 +44,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         movePlayer(dude, delta, 64);
+        dude.update(delta);
 
         this.map.move(moveables);
         cameraTrack(dude, worldCamera);
