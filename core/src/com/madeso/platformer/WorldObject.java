@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WorldObject implements Disposable, Moveable {
+    private static final float FLICKER = 0.02f;
     protected final PlatformGame game;
 
     private float x = 0;
@@ -29,6 +30,8 @@ public abstract class WorldObject implements Disposable, Moveable {
 
     protected CollisionFlags latestFlags = new CollisionFlags();
     private boolean facingRight = false;
+    private float flickertimer = 0;
+    private float ftimer = 0;
 
     public WorldObject(PlatformGame game) {
         this.game = game;
@@ -57,6 +60,18 @@ public abstract class WorldObject implements Disposable, Moveable {
        for(AnimationGroup g : groups) {
            g.update(dt);
        }
+
+       if( this.flickertimer > 0) {
+           this.flickertimer -= dt;
+       }
+       else {
+           this.flickertimer = 0;
+       }
+       this.ftimer += dt;
+       if( this.ftimer > FLICKER*2) {
+           this.ftimer -= FLICKER*2;
+       }
+
        subupdate(dt);
        return this.removeMe;
    }
@@ -77,6 +92,12 @@ public abstract class WorldObject implements Disposable, Moveable {
     public void subrender(AnimationGroup animation, SpriteBatch batch, OrthographicCamera cam) {
         float size = 64f;
 
+        if( isFlickering() ) {
+            if( this.ftimer > FLICKER ) {
+                return;
+            }
+        }
+
         if( animation == null) throw new NullPointerException("animation is null");
         if( animation.getAnimation()==null) throw new NullPointerException("get anim is null");
 
@@ -95,6 +116,10 @@ public abstract class WorldObject implements Disposable, Moveable {
             batch.draw(reg, suggestedX, suggestedY, size, size);
             batch.setColor(1, 1, 1, 1);
         }
+    }
+
+    public boolean isFlickering() {
+        return this.flickertimer > 0;
     }
 
     @Override
@@ -141,5 +166,9 @@ public abstract class WorldObject implements Disposable, Moveable {
 
     public Rectangle getRect() {
         return new Rectangle(this.x, this.y, 64, 64);
+    }
+
+    public void flicker(float time) {
+        this.flickertimer = time;
     }
 }

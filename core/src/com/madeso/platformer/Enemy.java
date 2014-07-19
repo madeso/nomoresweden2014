@@ -36,6 +36,7 @@ public class Enemy extends GravityObject {
 
     public void hurt() {
         this.health -= 1;
+        this.flicker(1.0f);
         if( this.health <= 0 ) {
             this.removeMe = true;
         }
