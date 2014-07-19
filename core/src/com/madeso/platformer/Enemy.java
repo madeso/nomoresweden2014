@@ -49,8 +49,8 @@ public class Enemy extends GravityObject {
         this.flicker(1.0f);
         if( this.health <= 0 ) {
             this.removeMe = true;
-            this.world.add(body);
             if( this.body != null ) {
+                this.world.add(body);
                 this.body.setup(this.getX(), this.getY(), this.isFacingRight(), bulletDirection);
                 body = null;
             }

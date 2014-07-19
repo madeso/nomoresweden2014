@@ -31,6 +31,7 @@ public class Body extends GravityObject {
         dx = 1.0f;
         if( !direction ) dx = -1;
         this.sounddeath.play();
+        GameState.murder();
 
         dx *= 0.5f + (random.nextFloat() / 0.5f);
     }

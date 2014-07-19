@@ -16,6 +16,7 @@ public class Player extends GravityObject {
     private final SmartSound soundHardThud;
     private final SmartSound soundSoftThud;
     private final GameWorld world;
+    private final SmartAnimation headMurder;
     private float airtime = 0.0f;
 
     private final SmartAnimation bodyIdle;
@@ -44,8 +45,10 @@ public class Player extends GravityObject {
         this.bodyJump = game.assetManager.animation(this.destructor, path).setAnimation(0.1f, new int[][]{ {3,0},{3,1} });
         this.bodyFall = game.assetManager.animation(this.destructor, path).setAnimation(0.1f, new int[][]{ {3,2},{3,3} });
 
-        this.headIdle = game.assetManager.animation(this.destructor, path).setAnimation(0.5f, new int[][]{ {1,0}, {1,1} });
-        this.headHappy = game.assetManager.animation(this.destructor, path).setAnimation(0.5f, new int[][]{ {1,2} });
+        this.headIdle = game.assetManager.animation(this.destructor, path).setAnimation(0.5f, new int[][]{ {1,0} });
+        this.headHappy = game.assetManager.animation(this.destructor, path).setAnimation(0.4f, new int[][]{ {1,2} });
+        this.headMurder = game.assetManager.animation(this.destructor, path).setAnimation(0.2f, new int[][]{ {1,3} });
+        // this.headPickup = game.assetManager.animation(this.destructor, path).setAnimation(0.2f, new int[][]{ {1,1} });
 
         this.gunIdle = game.assetManager.animation(this.destructor, path).setAnimation(0.5f, new int[][]{ {2,0} });
 
@@ -61,6 +64,8 @@ public class Player extends GravityObject {
     protected void subupdate(float dt) {
         float dx = 0;
         float speed = 64 * 3;
+
+        GameState.update(dt);
 
         if( this.latestFlags.down && this.lastdown == false ) {
             System.out.println(this.lastvy);
@@ -133,11 +138,15 @@ public class Player extends GravityObject {
             this.airtime += dt;
         }
 
-        if( this.airtime > 0.5f ) {
-            this.head.changeAnimation(headHappy);
+        if( GameState.murdering > 0 ) {
+            this.head.changeAnimation(headMurder);
         }
         else {
-            this.head.changeAnimation(headIdle);
+            if (this.airtime > 0.5f) {
+                this.head.changeAnimation(headHappy);
+            } else {
+                this.head.changeAnimation(headIdle);
+            }
         }
 
         dx *= dt * speed;
