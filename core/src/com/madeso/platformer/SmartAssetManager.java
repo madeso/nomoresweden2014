@@ -74,4 +74,11 @@ public class SmartAssetManager implements Disposable {
         destructor.add(animation);
         return animation;
     }
+
+    public SmartSound sound(Destructor destructor, String name) {
+        SmartSound sound = new SmartSound(this.assetManager, name);
+        assetsToLoad.add(sound);
+        destructor.add(sound);
+        return sound;
+    }
 }

@@ -23,10 +23,12 @@ public abstract class GravityObject extends WorldObject {
         if( this.latestFlags.y() ) this.vy = 0;
     }
 
-    public void jump(float strength) {
+    public boolean jump(float strength) {
         if( this.latestFlags.down ) {
-            this.vy = 500;
+            this.vy = strength;
             this.latestFlags.down = false;
+            return true;
         }
+        return false;
     }
 }

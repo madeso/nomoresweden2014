@@ -7,9 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Player extends GravityObject {
 
+    private static final float GUNTIMER = 0.1f;
     private final SmartAnimation headHappy;
     private final SmartAnimation bodyJump;
     private final SmartAnimation bodyFall;
+    private final SmartSound soundJump;
+    private final SmartSound soundThud;
+    private final SmartSound soundHardThud;
+    private final SmartSound soundSoftThud;
     private float airtime = 0.0f;
 
     private final SmartAnimation bodyIdle;
@@ -19,9 +24,17 @@ public class Player extends GravityObject {
     private final AnimationGroup head;
     private final AnimationGroup gun;
     private final SmartAnimation bodyRun;
+    private float gcd = 0.0f;
+    private final SmartSound soundGun;
 
     public Player(PlatformGame game) {
         super(game);
+
+        this.soundJump = game.assetManager.sound(this.destructor, "jump.wav");
+        this.soundGun = game.assetManager.sound(this.destructor, "gun.wav");
+        this.soundThud = game.assetManager.sound(this.destructor, "thud.wav");
+        this.soundHardThud = game.assetManager.sound(this.destructor, "hardthud.wav");
+        this.soundSoftThud = game.assetManager.sound(this.destructor, "softthud.wav");
 
         String path = "player.png";
         this.bodyIdle = game.assetManager.animation(this.destructor, path).setAnimation(0.5f, new int[][]{ {0,0} });
@@ -39,10 +52,26 @@ public class Player extends GravityObject {
         this.gun = this.createGroup(this.gunIdle);
     }
 
+    boolean lastdown = true;
+    float lastvy = 0;
+
     @Override
     protected void subupdate(float dt) {
         float dx = 0;
         float speed = 64 * 3;
+
+        if( this.latestFlags.down && this.lastdown == false ) {
+            System.out.println(this.lastvy);
+            if( this.lastvy < -600 ) {
+                this.soundHardThud.play();
+            }
+            else if( this.lastvy < -300 ) {
+                this.soundThud.play();
+            }
+            else if( this.lastvy < -90 ) {
+                this.soundSoftThud.play();
+            }
+        }
 
         boolean moving = false;
 
@@ -59,7 +88,23 @@ public class Player extends GravityObject {
         }
 
         if( IsDown(Input.Keys.UP, Input.Keys.W) ) {
-            this.jump(100);
+            if ( this.jump(500) ) {
+                this.soundJump.play();
+            }
+        }
+
+        if( IsDown(Input.Keys.X, Input.Keys.CONTROL_LEFT)) {
+            if( gcd <= 0 ) {
+                this.soundGun.play();
+                gcd += GUNTIMER;
+            }
+        }
+
+        if( gcd > 0 ) {
+            gcd -= dt;
+        }
+        else {
+            gcd = 0;
         }
 
         if( this.latestFlags.down ) {
@@ -94,6 +139,9 @@ public class Player extends GravityObject {
 
         dx *= dt * speed;
         this.move(dx,0);
+
+        this.lastdown = this.latestFlags.down;
+        this.lastvy = this.vy;
     }
 
     private boolean IsDown(int a, int b) {
