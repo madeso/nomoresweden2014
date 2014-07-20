@@ -13,11 +13,12 @@ import com.badlogic.gdx.math.Vector3;
 public class GameScreen implements Screen {
     static final float UNITS_PER_METER = 1f;
     private static final float SMOOTH_TIME = 0.25f;
-    private static final float BTNSIZE = 32.0f;
+    private static final float BTNSIZE = 64.0f;
     private static final float BTNX = 10;
     private static final float BTNY = 10;
     private static final float BTNSPACE = 5;
     private static final float TEXTWIDTH = PlatformGame.TEXTWIDTH;
+    private static final float TEXTHEIGHT = PlatformGame.TEXTHEIGHT;
     private final OrthographicCamera fontCamera;
     private final Button btnLeft;
     private final Button btnRight;
@@ -181,12 +182,18 @@ public class GameScreen implements Screen {
         this.game.batch.setProjectionMatrix(fontCamera.combined);
         game.batch.begin();
         if( this.dude.getClass() == PlayerBody.class && GameState.dt > 0.9f  ) {
-            game.font.draw(game.batch, "Touch to restart!", 10, 10);
+            String display = "TOUCH TO RESTART";
+            float w = game.font.getBounds(display).width;
+            game.font.draw(game.batch, display, (TEXTWIDTH-w)/2.0f, TEXTHEIGHT/2);
         }
-        btnLeft.draw(game.batch);
-        btnRight.draw(game.batch);
-        btnJump.draw(game.batch);
-        btnShoot.draw(game.batch);
+
+        if( this.dude.getClass() == Player.class ) {
+            btnLeft.draw(game.batch);
+            btnRight.draw(game.batch);
+            btnJump.draw(game.batch);
+            btnShoot.draw(game.batch);
+        }
+
         game.batch.end();
 
         if( nextLevel != null ) {

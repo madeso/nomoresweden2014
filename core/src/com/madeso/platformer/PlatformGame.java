@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PlatformGame extends Game {
     public static final float TEXTWIDTH = 800;
-    private static final float TEXTHEIGHT = 480;
+    public static final float TEXTHEIGHT = 480;
     public SpriteBatch batch;
     public BitmapFont font;
     public SmartAssetManager assetManager;
