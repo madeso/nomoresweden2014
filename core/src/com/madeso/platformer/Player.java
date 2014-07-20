@@ -74,6 +74,8 @@ public class Player extends GravityObject {
         float dx = 0;
         float speed = 64 * 3;
 
+        boolean shooting = IsDown(Input.Keys.X, Input.Keys.SPACE);
+
         GameState.update(dt);
 
         if( this.latestFlags.down && this.lastdown == false ) {
@@ -93,13 +95,13 @@ public class Player extends GravityObject {
         if( IsDown(Input.Keys.LEFT, Input.Keys.A) ) {
             dx -= 1;
             moving = true;
-            this.faceLeft();
+            if( shooting == false ) this.faceLeft();
         }
 
         if( IsDown(Input.Keys.RIGHT, Input.Keys.D) ) {
             dx += 1;
             moving = true;
-            this.faceRight();
+            if( shooting == false ) this.faceRight();
         }
 
         if( IsDown(Input.Keys.UP, Input.Keys.W) ) {
@@ -108,7 +110,7 @@ public class Player extends GravityObject {
             }
         }
 
-        if( IsDown(Input.Keys.X, Input.Keys.SPACE)) {
+        if( shooting ) {
             if( gcd <= 0 ) {
                 this.soundGun.play();
                 gcd += GUNTIMER;

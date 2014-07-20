@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class GameScreen implements Screen {
     static final float UNITS_PER_METER = 1f;
+    private static final float SMOOTH_TIME = 0.25f;
     private final OrthographicCamera fontCamera;
     private OrthographicCamera worldCamera;
     PlatformGame game;
@@ -74,6 +75,9 @@ public class GameScreen implements Screen {
             @Override
             public void create(OrthoMap map, float x, float y, MapObject properties) {
                 dude.teleport(x,y);
+                cx = x;
+                cy = y;
+                dude.faceRight();
             }
         });
 
@@ -162,11 +166,28 @@ public class GameScreen implements Screen {
         }
     }
 
+    float cx = 0;
+    float cy = 0;
+
     private void cameraTrack(WorldObject dude, OrthographicCamera camera) {
         if( dude != null ) {
-            camera.position.x = NiceValue(dude.getX());
-            camera.position.y = NiceValue(dude.getY());
+            float dx = 200;
+            if( dude.isFacingRight() == false ) dx *= -1;
+
+            cx = Smooth(cx, SMOOTH_TIME, dude.getX() + dx);
+            cy = Smooth(cy, SMOOTH_TIME, dude.getY());
+
+            camera.position.x = NiceValue(cx);
+            camera.position.y = NiceValue(cy);
         }
+    }
+
+    private float Smooth(float now, float smoothTime, float next) {
+        float dt = Gdx.graphics.getDeltaTime();
+
+        float distance = next - now;
+        float speed = distance / smoothTime;
+        return now + speed * dt;
     }
 
     private float NiceValue(float x) {

@@ -27,7 +27,7 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.font.draw(game.batch, "Welcome to Platform Game!!! ", 100, 150);
+        game.font.draw(game.batch, "The president has been kidnapped. Save him! There is no prize, only GLORY! ", 100, 150);
         game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
         game.batch.end();
 

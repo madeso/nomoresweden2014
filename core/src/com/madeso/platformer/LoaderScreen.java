@@ -28,7 +28,7 @@ public class LoaderScreen implements Screen {
         if( this.loaded )
         {
             game.batch.begin();
-            game.font.draw(game.batch, "Welcome to Platform Game!!! ", 100, 150);
+            game.font.draw(game.batch, " ", 100, 150);
             game.font.draw(game.batch, "Loading done. Touch to play.", 100, 100);
             game.batch.end();
 
@@ -53,8 +53,8 @@ public class LoaderScreen implements Screen {
             float progress = game.assetManager.getProgress();
 
             game.batch.begin();
-            game.font.draw(game.batch, "Welcome to Platform Game!!! ", 100, 150);
-            game.font.draw(game.batch, "Loading: " + Float.toString(progress), 100, 100);
+            game.font.draw(game.batch, "Please wait...", 100, 150);
+            game.font.draw(game.batch, "Loading: " + Float.toString(progress*100) + "%", 100, 100);
             game.batch.end();
         }
     }
