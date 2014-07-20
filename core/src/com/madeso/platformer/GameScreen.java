@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
 
         btnLeft.setup(BTNX, BTNY, BTNSIZE, BTNSIZE );
         btnRight.setup(BTNX + BTNSPACE + BTNSIZE, BTNY, BTNSIZE, BTNSIZE );
-        btnJump.setup(BTNX + (BTNSPACE + BTNSIZE) / 2, BTNY + BTNSPACE + BTNSIZE, BTNSIZE, BTNSIZE);
+        btnJump.setup(TEXTWIDTH - (BTNSIZE + BTNX), BTNY + BTNSPACE + BTNSIZE, BTNSIZE, BTNSIZE);
 
         btnShoot.setup(TEXTWIDTH - (BTNSIZE + BTNX), BTNY, BTNSIZE, BTNSIZE);
 
