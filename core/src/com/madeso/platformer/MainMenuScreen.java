@@ -33,7 +33,7 @@ public class MainMenuScreen implements Screen {
 
         waiter += delta;
 
-        if (waiter > 1.0f && Gdx.input.isTouched()) {
+        if (waiter > GameState.WAIT && Gdx.input.isTouched()) {
             GameScreen.LoadWorld(game, 1);
             dispose();
         }

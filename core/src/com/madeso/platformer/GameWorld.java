@@ -76,6 +76,7 @@ public class GameWorld implements Disposable {
     }
 
     public void add(WorldObject body) {
+       if( body == null ) throw new NullPointerException("Body is null");
         this.special.add(body);
     }
 

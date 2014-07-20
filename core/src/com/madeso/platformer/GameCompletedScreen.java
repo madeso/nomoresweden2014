@@ -34,7 +34,7 @@ public class GameCompletedScreen implements Screen {
 
         waiter += delta;
 
-        if (waiter > 1.0f && Gdx.input.isTouched()) {
+        if (waiter > GameState.WAIT && Gdx.input.isTouched()) {
             this.game.setScreen(new MainMenuScreen(game));
             dispose();
         }

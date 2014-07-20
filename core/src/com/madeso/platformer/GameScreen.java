@@ -90,6 +90,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.moveables.update(delta * GameState.dt, this.map);
 
+        this.music.setVolume(GameState.dt);
+
         if( GameState.dt > 0.9f && Gdx.input.isTouched() && dude.getClass() == PlayerBody.class ) {
             game.setScreen(new MainMenuScreen(game));
             this.dispose();
@@ -209,5 +211,6 @@ public class GameScreen implements Screen {
 
     public static void LoadWorld(PlatformGame game, int id) {
         game.setScreen(new LoaderScreen(game, new GameScreen(game, id)));
+        GameState.entry();
     }
 }

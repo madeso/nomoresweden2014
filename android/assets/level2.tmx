@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="80" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="tiles" tilewidth="64" tileheight="64">
+  <image source="tiles.png" width="256" height="256"/>
+ </tileset>
+ <layer name="sky" width="40" height="80">
+  <data encoding="base64" compression="zlib">
+   eJztzqEBAAAIA6AVo/+/6wEmg41Ap5IUwJM+8gMAAAAAAAAAAAAA2AZ1Ez9B
+  </data>
+ </layer>
+ <layer name="col" width="40" height="80">
+  <data encoding="base64" compression="zlib">
+   eJztl9EOxCAIBE3//6PvtWl6WmC3LJZJ+tSoIyroMcY4Ah+TiFf77e/Hpv0wfqpU8VNd56/4sTzRfmhPlh/Kk+0XdWy/mGP7xdwRe4RJVb/sNV/tAZWYXv0QZw6JkssdVfyiOZU1x8p+3hzgnS87z1nHtvixia6FKu3nR62WnYnkOjbRXMwEUStYoGoZmtU9NNtvRvvdj2e5M3w1fogzyPZD9HHtZzXv2X903vry/kOgUkP+UcVPldkZVaCyn8LefPq2zvKNjsf2Rfk9rYne/tnMarW1HQP1+HlR8FN+v63OV7bfCvV82/GL8Xb+s9byN/xU378IKvp59kmkndVPiZ38Mu75O8Uvgx3el5lU8VP+fmRkBbc=
+  </data>
+ </layer>
+ <layer name="detail" width="40" height="80">
+  <data encoding="base64" compression="zlib">
+   eJzt2kEOgCAMRFES7n9n90TEEkqnzX8bjQttBwQXtgZ13Xgd+v6O3e0xrjSnVHpRqQNxmAM25HUemQKoTnWd86yrD0ePewMAkMXpvWv3fuyhc9myyVavOoU8FWoAUJ/HN4nX+lVhXXzrIbKvCpmOKvYE3MZ75Ocr24jcd57J/FiLyqhPzrPIWDOwUmleW3tR/c/0hCx7tgeVOpDbA4tMAIs=
+  </data>
+ </layer>
+ <objectgroup name="obj" width="40" height="80">
+  <object gid="16" x="128" y="5056"/>
+  <object gid="15" x="640" y="576"/>
+  <object gid="8" x="1472" y="2752"/>
+  <object gid="8" x="896" y="2880"/>
+  <object gid="8" x="384" y="2880"/>
+  <object gid="8" x="448" y="3392"/>
+  <object gid="8" x="640" y="3456"/>
+  <object gid="8" x="1152" y="3584"/>
+  <object gid="8" x="1664" y="3584"/>
+  <object gid="8" x="1984" y="3648"/>
+  <object gid="8" x="2112" y="2368"/>
+  <object gid="8" x="2304" y="2176"/>
+  <object gid="8" x="2048" y="1856"/>
+  <object gid="8" x="1792" y="1856"/>
+  <object gid="8" x="896" y="1728"/>
+  <object gid="8" x="704" y="1728"/>
+  <object gid="8" x="1536" y="1792"/>
+  <object gid="12" x="448" y="1600"/>
+  <object gid="12" x="768" y="1600"/>
+  <object gid="12" x="1472" y="1664"/>
+  <object gid="12" x="1920" y="1728"/>
+  <object gid="12" x="2048" y="1728"/>
+  <object gid="12" x="2368" y="2048"/>
+  <object gid="12" x="1408" y="2688"/>
+  <object gid="12" x="832" y="2752"/>
+  <object gid="12" x="256" y="2752"/>
+  <object gid="12" x="512" y="3200"/>
+  <object gid="12" x="1088" y="3456"/>
+  <object gid="12" x="1600" y="3456"/>
+  <object gid="12" x="1920" y="4160"/>
+  <object gid="12" x="1408" y="4288"/>
+  <object gid="12" x="512" y="4416"/>
+  <object gid="12" x="704" y="4608"/>
+  <object gid="4" x="1280" y="4480"/>
+  <object gid="4" x="1728" y="4224"/>
+  <object gid="4" x="1792" y="4032"/>
+  <object gid="4" x="2176" y="3840"/>
+  <object gid="4" x="2112" y="5056"/>
+  <object gid="4" x="1856" y="4992"/>
+  <object gid="4" x="1472" y="5056"/>
+ </objectgroup>
+</map>
