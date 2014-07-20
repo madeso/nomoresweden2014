@@ -74,7 +74,7 @@ public class Player extends GravityObject {
         float dx = 0;
         float speed = 64 * 3;
 
-        boolean shooting = IsDown(Input.Keys.X, Input.Keys.SPACE);
+        boolean shooting = GameState.ctrlShooting;
 
         GameState.update(dt);
 
@@ -92,19 +92,19 @@ public class Player extends GravityObject {
 
         boolean moving = false;
 
-        if( IsDown(Input.Keys.LEFT, Input.Keys.A) ) {
+        if(GameState.ctrlLeft ) {
             dx -= 1;
             moving = true;
             if( shooting == false ) this.faceLeft();
         }
 
-        if( IsDown(Input.Keys.RIGHT, Input.Keys.D) ) {
+        if( GameState.ctrlRight ) {
             dx += 1;
             moving = true;
             if( shooting == false ) this.faceRight();
         }
 
-        if( IsDown(Input.Keys.UP, Input.Keys.W) ) {
+        if( GameState.ctrlJump ) {
             if ( this.jump(500) ) {
                 this.soundJump.play();
             }
@@ -164,10 +164,6 @@ public class Player extends GravityObject {
 
         this.lastdown = this.latestFlags.down;
         this.lastvy = this.vy;
-    }
-
-    private boolean IsDown(int a, int b) {
-        return Gdx.input.isKeyPressed(a) || Gdx.input.isKeyPressed(b);
     }
 
     @Override

@@ -6,6 +6,11 @@ public class GameState {
     public static float murdering = 0.0f;
     public static float dt = 1.0f;
 
+    public static boolean ctrlShooting = false;
+    public static boolean ctrlLeft = false;
+    public static boolean ctrlRight = false;
+    public static boolean ctrlJump = false;
+
     public static void murder() {
         murdering = Math.max(1.0f, murdering+0.25f);
     }

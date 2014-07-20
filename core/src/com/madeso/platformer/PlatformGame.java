@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PlatformGame extends Game {
+    public static final float TEXTWIDTH = 800;
+    private static final float TEXTHEIGHT = 480;
     public SpriteBatch batch;
     public BitmapFont font;
     public SmartAssetManager assetManager;
@@ -33,7 +35,7 @@ public class PlatformGame extends Game {
 
     public static OrthographicCamera CreateTextCamera() {
         OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, TEXTWIDTH, TEXTHEIGHT);
         return camera;
     }
 }

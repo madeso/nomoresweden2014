@@ -1,6 +1,7 @@
 package com.madeso.platformer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,7 +13,16 @@ import com.badlogic.gdx.math.Vector3;
 public class GameScreen implements Screen {
     static final float UNITS_PER_METER = 1f;
     private static final float SMOOTH_TIME = 0.25f;
+    private static final float BTNSIZE = 32.0f;
+    private static final float BTNX = 10;
+    private static final float BTNY = 10;
+    private static final float BTNSPACE = 5;
+    private static final float TEXTWIDTH = PlatformGame.TEXTWIDTH;
     private final OrthographicCamera fontCamera;
+    private final Button btnLeft;
+    private final Button btnRight;
+    private final Button btnJump;
+    private final Button btnShoot;
     private OrthographicCamera worldCamera;
     PlatformGame game;
     WorldObject dude;
@@ -35,6 +45,17 @@ public class GameScreen implements Screen {
         Player p = new Player(this.moveables, game);
         // p.teleport(70,70);
         this.moveables.spawn(p);
+
+        this.btnLeft = new Button(game, this.destructor, "buttons/left");
+        this.btnRight = new Button(game, this.destructor, "buttons/right");
+        this.btnJump = new Button(game, this.destructor, "buttons/jump");
+        this.btnShoot = new Button(game, this.destructor, "buttons/shoot");
+
+        btnLeft.setup(BTNX, BTNY, BTNSIZE, BTNSIZE );
+        btnRight.setup(BTNX + BTNSPACE + BTNSIZE, BTNY, BTNSIZE, BTNSIZE );
+        btnJump.setup(BTNX + (BTNSPACE + BTNSIZE) / 2, BTNY + BTNSPACE + BTNSIZE, BTNSIZE, BTNSIZE);
+
+        btnShoot.setup(TEXTWIDTH - (BTNSIZE + BTNX), BTNY, BTNSIZE, BTNSIZE);
 
         this.dude = p;
 
@@ -92,6 +113,16 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        this.fontCamera.update();
+
+        btnLeft.update(this.fontCamera);
+        btnRight.update(this.fontCamera);
+        btnJump.update(this.fontCamera);
+        btnShoot.update(this.fontCamera);
+
+        updateControls();
+
         this.moveables.update(delta * GameState.dt, this.map);
 
         this.music.setVolume(GameState.dt);
@@ -149,9 +180,14 @@ public class GameScreen implements Screen {
         this.fontCamera.update();
         this.game.batch.setProjectionMatrix(fontCamera.combined);
         game.batch.begin();
-        game.font.draw(game.batch, "gamestuff", 20, 20);
+        if( this.dude.getClass() == PlayerBody.class && GameState.dt > 0.9f  ) {
+            game.font.draw(game.batch, "Touch to restart!", 10, 10);
+        }
+        btnLeft.draw(game.batch);
+        btnRight.draw(game.batch);
+        btnJump.draw(game.batch);
+        btnShoot.draw(game.batch);
         game.batch.end();
-
 
         if( nextLevel != null ) {
             int next = nextLevel.intValue();
@@ -164,6 +200,17 @@ public class GameScreen implements Screen {
             }
             this.dispose();
         }
+    }
+
+    private void updateControls() {
+        GameState.ctrlShooting = D(Input.Keys.X) || D(Input.Keys.SPACE) || btnShoot.isDown() ;
+        GameState.ctrlLeft = D(Input.Keys.LEFT) || D(Input.Keys.A) || btnLeft.isDown();
+        GameState.ctrlRight = D(Input.Keys.RIGHT) || D(Input.Keys.D) || btnRight.isDown();
+        GameState.ctrlJump = D(Input.Keys.UP) || D(Input.Keys.W) || btnJump.isDown();
+    }
+
+    private boolean D(int a) {
+        return Gdx.input.isKeyPressed(a);
     }
 
     float cx = 0;
