@@ -178,9 +178,12 @@ public class Player extends GravityObject {
     public PlayerBody kill(boolean other) {
         this.removeMe = true;
         world.add(this.pbody);
-        this.pbody.setup(this.getX(), this.getY(), this.isFacingRight(), other);
-        PlayerBody ret = this.pbody;
-        this.pbody = null;
-        return ret;
+        if( this.pbody != null ) {
+            this.pbody.setup(this.getX(), this.getY(), this.isFacingRight(), other);
+            PlayerBody ret = this.pbody;
+            this.pbody = null;
+            return ret;
+        }
+        else return null;
     }
 }

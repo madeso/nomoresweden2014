@@ -2,9 +2,7 @@ package com.madeso.platformer;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -24,7 +22,7 @@ public class OrthoMap implements SuperAsset {
     private TiledMap map;
 
     public static interface ObjectCreator {
-        void create(OrthoMap map, float x, float y);
+        void create(OrthoMap map, float x, float y, MapProperties properties);
     }
 
     public OrthoMap(AssetManager assetManager, String path) {
@@ -46,7 +44,7 @@ public class OrthoMap implements SuperAsset {
             MapObject obj = objs.get(i);
             String tile = obj.getProperties().get("gid").toString();
             Rectangle r = ((RectangleMapObject)obj).getRectangle();
-            getCreator(tile).create(this, r.getX(), r.getY());
+            getCreator(tile).create(this, r.getX(), r.getY(), obj.getProperties());
         }
     }
 

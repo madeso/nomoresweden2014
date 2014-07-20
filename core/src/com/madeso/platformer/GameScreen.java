@@ -1,16 +1,13 @@
 package com.madeso.platformer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameScreen implements Screen {
     static final float UNITS_PER_METER = 1f;
@@ -43,7 +40,7 @@ public class GameScreen implements Screen {
         // ninja
         this.map.registerCreator("4", new OrthoMap.ObjectCreator() {
             @Override
-            public void create(OrthoMap map, float x, float y) {
+            public void create(OrthoMap map, float x, float y, MapProperties properties) {
                 moveables.spawn(new Enemy(moveables, game, x, y, 0));
             }
         });
@@ -51,7 +48,7 @@ public class GameScreen implements Screen {
         // agent
         this.map.registerCreator("8", new OrthoMap.ObjectCreator() {
             @Override
-            public void create(OrthoMap map, float x, float y) {
+            public void create(OrthoMap map, float x, float y, MapProperties properties) {
                 moveables.spawn(new Enemy(moveables, game, x, y, 1));
             }
         });
@@ -59,8 +56,17 @@ public class GameScreen implements Screen {
         // suicidal
         this.map.registerCreator("12", new OrthoMap.ObjectCreator() {
             @Override
-            public void create(OrthoMap map, float x, float y) {
+            public void create(OrthoMap map, float x, float y, MapProperties properties) {
                 moveables.spawn(new Enemy(moveables, game, x, y, 2));
+            }
+        });
+
+        // end
+        this.map.registerCreator("15", new OrthoMap.ObjectCreator() {
+            @Override
+            public void create(OrthoMap map, float x, float y, MapProperties properties) {
+                System.out.println("Spawning trigger");
+                moveables.spawn(new Trigger(game, properties, x,y));
             }
         });
 
@@ -68,6 +74,8 @@ public class GameScreen implements Screen {
         music.setLooping(true);
         music.play();
     }
+
+    private Integer nextLevel = null;
 
     @Override
     public void render(float delta) {
@@ -96,8 +104,22 @@ public class GameScreen implements Screen {
             public void collide(WorldObject left, WorldObject right) {
                 Player player = (Player)left;
                 Enemy other = (Enemy) right;
-                dude = player.kill(other.isFacingRight());
+                PlayerBody b = player.kill(other.isFacingRight());
+                if( b != null ) {
+                    dude = b;
+                }
                 GameState.dt = 0.2f;
+            }
+        });
+
+        final GameScreen self = this;
+        this.moveables.overlap(Player.class, Trigger.class, new GameWorld.Collision() {
+            @Override
+            public void collide(WorldObject left, WorldObject right) {
+                Player player = (Player)left;
+                Trigger other = (Trigger) right;
+                other.trigger();
+                self.nextLevel = new Integer(other.nextLevel);
             }
         });
 
@@ -116,6 +138,13 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.font.draw(game.batch, "gamestuff", 20, 20);
         game.batch.end();
+
+
+        if( nextLevel != null ) {
+            System.out.println("Next level?");
+            this.game.setScreen(new GameCompletedScreen(game));
+            this.dispose();
+        }
     }
 
     private void cameraTrack(WorldObject dude, OrthographicCamera camera) {
