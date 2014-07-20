@@ -5,7 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
         this.map = game.assetManager.orthoMap(destructor, levelpath);
 
         Player p = new Player(this.moveables, game);
-        p.teleport(70,70);
+        // p.teleport(70,70);
         this.moveables.spawn(p);
 
         this.dude = p;
@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
         // ninja
         this.map.registerCreator("4", new OrthoMap.ObjectCreator() {
             @Override
-            public void create(OrthoMap map, float x, float y, MapProperties properties) {
+            public void create(OrthoMap map, float x, float y, MapObject properties) {
                 moveables.spawn(new Enemy(moveables, game, x, y, 0));
             }
         });
@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
         // agent
         this.map.registerCreator("8", new OrthoMap.ObjectCreator() {
             @Override
-            public void create(OrthoMap map, float x, float y, MapProperties properties) {
+            public void create(OrthoMap map, float x, float y, MapObject properties) {
                 moveables.spawn(new Enemy(moveables, game, x, y, 1));
             }
         });
@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
         // suicidal
         this.map.registerCreator("12", new OrthoMap.ObjectCreator() {
             @Override
-            public void create(OrthoMap map, float x, float y, MapProperties properties) {
+            public void create(OrthoMap map, float x, float y, MapObject properties) {
                 moveables.spawn(new Enemy(moveables, game, x, y, 2));
             }
         });
@@ -64,9 +64,16 @@ public class GameScreen implements Screen {
         // end
         this.map.registerCreator("15", new OrthoMap.ObjectCreator() {
             @Override
-            public void create(OrthoMap map, float x, float y, MapProperties properties) {
-                System.out.println("Spawning trigger");
+            public void create(OrthoMap map, float x, float y, MapObject properties) {
                 moveables.spawn(new Trigger(game, properties, x,y));
+            }
+        });
+
+        // player
+        this.map.registerCreator("16", new OrthoMap.ObjectCreator() {
+            @Override
+            public void create(OrthoMap map, float x, float y, MapObject properties) {
+                dude.teleport(x,y);
             }
         });
 
@@ -141,8 +148,14 @@ public class GameScreen implements Screen {
 
 
         if( nextLevel != null ) {
-            System.out.println("Next level?");
-            this.game.setScreen(new GameCompletedScreen(game));
+            int next = nextLevel.intValue();
+            if( next < 0 ) {
+                this.game.setScreen(new GameCompletedScreen(game));
+            }
+            else {
+                this.music.stop();
+                GameScreen.LoadWorld(game, next);
+            }
             this.dispose();
         }
     }

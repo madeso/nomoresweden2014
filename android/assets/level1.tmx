@@ -37,6 +37,8 @@
   <object gid="8" x="2304" y="320"/>
   <object gid="8" x="2368" y="320"/>
   <object gid="8" x="2432" y="320"/>
-  <object gid="15" x="2112" y="320"/>
+  <object name="42" gid="15" x="2112" y="320"/>
+  <object gid="15" x="1088" y="320"/>
+  <object gid="16" x="128" y="576"/>
  </objectgroup>
 </map>

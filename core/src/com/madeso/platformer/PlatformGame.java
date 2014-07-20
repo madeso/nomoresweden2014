@@ -15,8 +15,8 @@ public class PlatformGame extends Game {
 		this.batch = new SpriteBatch();
         this.font = new BitmapFont();
         this.assetManager = new SmartAssetManager();
-        // this.setScreen(new MainMenuScreen(this));
-        GameScreen.LoadWorld(this, 1);
+        this.setScreen(new MainMenuScreen(this));
+        // GameScreen.LoadWorld(this, 1);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class OrthoMap implements SuperAsset {
     private TiledMap map;
 
     public static interface ObjectCreator {
-        void create(OrthoMap map, float x, float y, MapProperties properties);
+        void create(OrthoMap map, float x, float y, MapObject properties);
     }
 
     public OrthoMap(AssetManager assetManager, String path) {
@@ -44,7 +44,7 @@ public class OrthoMap implements SuperAsset {
             MapObject obj = objs.get(i);
             String tile = obj.getProperties().get("gid").toString();
             Rectangle r = ((RectangleMapObject)obj).getRectangle();
-            getCreator(tile).create(this, r.getX(), r.getY(), obj.getProperties());
+            getCreator(tile).create(this, r.getX(), r.getY(), obj);
         }
     }
 
